@@ -12,8 +12,8 @@ def generateGame(difficulty):
         for columns in range(9):
             randomNumber = random.randrange(1, 10)
             if random.randrange(difficulty) == 0:
-               board[rows][columns] = 0
-               continue
+                board[rows][columns] = 0
+                continue
             while not noRep(rows, columns, randomNumber):
                 randomNumber = random.randrange(1, 10)
             board[rows][columns] = randomNumber
@@ -40,3 +40,17 @@ def noRep(rows, columns, number):
 
     # If no repetition found return True
     return True
+
+
+def menu():
+
+    print("Welcome to Sudoku in Python")
+    print("\nWhich difficulty do you want to play ?")
+    print("a) EASY b) MEDIUM c) HARD")
+    difficulty = input("Choice: ")
+    difficultyDict = {"a": 6, "b": 4, "c": 2}
+    generateGame(difficultyDict[difficulty])
+
+
+menu()
+
