@@ -22,7 +22,8 @@ list_of_lists = [phrase.split(", ") for phrase in content]  # separate words by 
 flat_list = [item for sublist in list_of_lists for item in sublist]  # turn list of lists into flat list
 words_list = [word for word in flat_list if len(word) >= 5]  # filter all words than are less than 5 characters long
 perfect_list = [w for w in words_list if w.find(".") == -1]  # remove all words that have a '.' in them
-word = random.choice(perfect_list).upper() # choose a random word out of list of words
+word = random.choice(perfect_list).upper()
+# choose a random word out of list of words
 
 number_guesses = round(len(word) * 1.5)
 
@@ -102,6 +103,12 @@ def game():
     # Ask the user for a new letter
     new_letter = input("\nEnter the letter you want to try: ").upper()
 
+    # Check if input is suitable
+    if len(new_letter) > 1 or not new_letter.isalpha():
+        print("Wrong input, try again.")
+        game()
+        return
+
     # Check if new letter has already been guessed
     if new_letter in blanked_list:
         print("Letter already used! Try again.")
@@ -142,7 +149,10 @@ def game():
                 return
 
     if "_" not in blanked_list:
-        print("Congratulations, you won!")
+        for i in blanked_list:
+            print(i, end=" ")
+
+        print("\nCongratulations, you won!")
         return
 
     game()
