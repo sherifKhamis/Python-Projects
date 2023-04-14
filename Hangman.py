@@ -1,10 +1,28 @@
-# A basic Hangman game in Python
+# A Hangman game in Python with a web scraped list containing over 500 words
 
 import random
-
 # Possible words to be guessed
-words = ["HOSPITAL", "DOCTOR", "HOUSE", "TOWN", "VILLAGE", "AUTOMOTIVE", "MERCEDES", "DOG", "BATTERY"]
-word = random.choice(words)
+
+import requests
+from bs4 import BeautifulSoup
+
+url = 'https://simple.wikipedia.org/wiki/Wikipedia:List_of_1000_basic_words'
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
+content = soup.find('div', {'id': 'bodyContent'})
+bodyContent = content.text[134:7130]  # filter of body content list of words
+
+# remove letter headers in content
+content = bodyContent.split("\n")
+for i in content:
+    if len(i) < 5:
+        del content[content.index(i)]
+
+list_of_lists = [phrase.split(", ") for phrase in content]  # separate words by comma
+flat_list = [item for sublist in list_of_lists for item in sublist]  # turn list of lists into flat list
+words_list = [word for word in flat_list if len(word) >= 5]  # filter all words than are less than 5 characters long
+perfect_list = [w for w in words_list if w.find(".") == -1]  # remove all words that have a '.' in them
+word = random.choice(perfect_list).upper() # choose a random word out of list of words
 
 number_guesses = round(len(word) * 1.5)
 
@@ -102,6 +120,7 @@ def game():
                 index_list += str(letter)
         for i in index_list:
             blanked_list[int(i)] = new_letter
+        index_list = ""
 
     # If new letter is NOT part of to be guessed word
     else:
@@ -119,6 +138,7 @@ def game():
             print(hangman_pics[-number_guesses])
             if number_guesses == 1:
                 print("Game Over :(")
+                print(f"The wanted word was {word}")
                 return
 
     if "_" not in blanked_list:
