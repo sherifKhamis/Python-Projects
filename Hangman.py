@@ -123,6 +123,7 @@ def game():
 
     if "_" not in blanked_list:
         print("Congratulations, you won!")
+        return
 
     game()
 
