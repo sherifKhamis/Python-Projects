@@ -41,7 +41,7 @@ def game():
     second_acc_followers = second_acc[1]
     highest_acc = highest_follower_acc(first_acc, second_acc)
 
-    user_choice = input(f"Who has a higher follower count {first_acc_name} or {second_acc_name} ?. Type A for the first Account and B for the second: " )
+    user_choice = input(f"Who has a higher follower count {first_acc_name} or {second_acc_name} ?. Type A for the first Account and B for the second: " ).upper()
     if user_choice == "A" and highest_acc == first_acc_name:
         print("Correct Answer")
         points += 1
