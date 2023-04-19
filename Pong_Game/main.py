@@ -41,13 +41,13 @@ ball.goto(random.choice([-365, 360]), random.randint(-280, 280))
 
 def collision():
 
-    if ball.distance(paddles.left_paddle.pos()) < 50:
+    if ball.distance(paddles.left_paddle.pos()) < 60:
         if ball.speed() < 5:
             ball.speed(ball.speed()+0.5)
         ball.goto(360, random.randint(-280, 280))
         return
 
-    if ball.distance(paddles.right_paddle.pos()) < 50:
+    if ball.distance(paddles.right_paddle.pos()) < 60:
         if ball.speed() < 5:
             ball.speed(ball.speed() + 0.5)
         ball.goto(-365, random.randint(-280, 280))
