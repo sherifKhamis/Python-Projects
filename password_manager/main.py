@@ -2,6 +2,9 @@ import tkinter
 from PIL import ImageTk, Image
 import random
 from tkinter import ttk
+from tkinter import messagebox
+import json
+import os
 
 
 def generatePassword():
@@ -99,13 +102,44 @@ generate_button.place(x=500, y=355)
 add_button = ttk.Button(window, text="Add", command=lambda: add())
 add_button.place(x=300, y=400)
 
+search_button = ttk.Button(window, text="Search", command=lambda: search())
+search_button.place(x=620, y=255)
+
 
 def add():
-    f = open("database.txt", "a")
-    f.write(f"{website_entry.get()} | {email_entry.get()} | {password_entry.get()}")
+    website_data = website_entry.get()
+    email_data = email_entry.get()
+    password_data = password_entry.get()
+    data_dict = {
+        website_data:
+        {
+            'email': email_data,
+            'password': password_data
+        }
+    }
+    with open("database.json", encoding="utf-8", mode="r+") as f:
+        if os.stat("database.json").st_size == 0:
+            json.dump(data_dict, f, indent=4)
+        else:
+
+            data = json.load(f)
+            with open("database.json", encoding="utf-8", mode="w") as fp:
+                data.update(data_dict)
+                json.dump(data, fp, indent=4)
+
     website_entry.delete(0, "end")
     email_entry.delete(0, "end")
     password_entry.delete(0, "end")
+
+
+def search():
+
+    website_to_be_searched = website_entry.get()
+    json_data = json.loads(open("database.json").read())
+    try:
+        messagebox.showinfo("info", f"email: {json_data[website_to_be_searched]['email']}\npassword: {json_data[website_to_be_searched]['password']}")
+    except KeyError:
+        messagebox.showerror("error", "Website doesnt exist in database")
 
 
 window.mainloop()
